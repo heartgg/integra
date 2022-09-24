@@ -61,16 +61,10 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 
 // controller for getting a scanned barcode id
 func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
-	roomID := r.URL.Query().Get("roomID")
 	patientID := r.URL.Query().Get("patientID")
 	modality := r.URL.Query().Get("modality")
 
 	ctx := context.Background()
-
-	if roomID == "" {
-		fmt.Fprint(w, "Parameter 'roomID' is required")
-		return
-	}
 
 	if patientID == "" {
 		fmt.Fprint(w, "Parameter 'patientID' is required")
