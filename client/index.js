@@ -92,3 +92,13 @@ function updatePatientInfo(msg) {
     id++;
   }
 }
+
+function checkDisableButton(buttonId, num) {
+  const btn = document.getElementById(buttonId);
+  if (num <= 0) {
+    btn.disabled = true;
+  }
+  else {
+    btn.disabled = false;
+  }
+}
