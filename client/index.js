@@ -24,7 +24,7 @@ socket.onmessage = (event) => {
     case 1:
       break;
     case 2:
-      updatePatientInfo(msg);
+      updatePatientInfo(JSON.parse(msg.Body));
       break;
     default:
       console.log(`Unknown message type ${msg.Type} received from server`);
@@ -33,7 +33,7 @@ socket.onmessage = (event) => {
 };
 
 // update patient info displayed on page from message received from server
-function updatePatientInfo(msg) {
+function updatePatientInfo(data) {
   const infoList = document.getElementById("info-list");
   const examOpts = document.getElementById("exam-opts");
   const excludedOpts = document.getElementById("excluded-opts");
@@ -45,17 +45,17 @@ function updatePatientInfo(msg) {
   excludedOpts.innerHTML = "";
   examCheckedCount = 0;
 
-  for (let key in msg.patient) {
+  for (let key in data.patient) {
     const li = document.createElement("li");
-    li.innerHTML = `${key} : ${msg.patient[key]}`;
+    li.innerHTML = `${key} : ${data.patient[key]}`;
     infoList.appendChild(li);
   }
 
   let id = 0;
-  for (let key in msg.exams) {
+  for (let key in data.exams) {
     const li = document.createElement("li");
     li.setAttribute("class", "list-group-item");
-    const isSuggested = msg.exams[key] == 1 ? true : false;
+    const isSuggested = data.exams[key] == 1 ? true : false;
     li.innerHTML = `
       <input
         class="form-check-input me-1"
