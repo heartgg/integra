@@ -93,7 +93,11 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 	}
 
 	var patient Patient
-	dsnap.DataTo(&patient)
+	err = dsnap.DataTo(&patient)
+	if err != nil {
+		fmt.Fprint(w, err)
+		return
+	}
 
 	ejson := utils.AskAI(patient.Diagnosis, modalityExams["XRAY"], modalityExamsStr)
 	//FIXME: Make sure that ejson and pjson combine correctly
