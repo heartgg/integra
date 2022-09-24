@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"cloud.google.com/go/firestore"
+	"github.com/heartgg/integri-scan/server/models"
 	"github.com/heartgg/integri-scan/server/pkg/utils"
 	"github.com/heartgg/integri-scan/server/pkg/websocket"
 	"google.golang.org/api/iterator"
@@ -92,27 +93,20 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 		return
 	}
 
-	var patient Patient
+	var patient models.Patient
 	err = dsnap.DataTo(&patient)
 	if err != nil {
 		fmt.Fprint(w, err.Error())
 		return
 	}
 
-	ejson, err := utils.AskAI(patient.Diagnosis, modalityExams[modality], modalityExamsStr)
+
+	exams, err := utils.AskAI(patient.Diagnosis, modalityExams[modality], modalityExamsStr)
 	if err != nil {
 		fmt.Fprint(w, err.Error())
 		return
 	}
-	pjson, err := json.Marshal(patient)
-	if err != nil {
-		fmt.Fprint(w, "Error marshalling pjson")
-		return
-	}
-	combined := make(map[string]string)
-	combined["patient"] = string(pjson)
-	combined["exams"] = ejson
-	combined["modality"] = modality
+	combined := models.ExamsResult{patient, exams, modality}
 	combinedJson, err := json.Marshal(combined)
 	if err != nil {
 		fmt.Fprint(w, "Error marshalling combined json")
