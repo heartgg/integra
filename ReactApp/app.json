@@ -1,6 +1,14 @@
 {
   "expo": {
     "name": "ReactApp",
+    "plugins": [
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
+        }
+      ]
+    ],
     "slug": "ReactApp",
     "version": "1.0.0",
     "orientation": "portrait",

@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState } from 'react';
-import ScanButton from './ScanButton.js';
+import { tryOpenCamera } from './ScanButton.js';
 
 export default function App() {
   const [open, setOpen] = useState(false);
@@ -28,6 +28,8 @@ export default function App() {
         setValue={setValue}
         setItems={setItems}
       />
+      <Button title="Open Camera" onClick={tryOpenCamera}>
+      </Button>
     </View>
   );
 }
