@@ -11,7 +11,6 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/heartgg/integri-scan/server/pkg/utils"
 	"github.com/heartgg/integri-scan/server/pkg/websocket"
-	"google.golang.org/api/iterator"
 	"gopkg.in/yaml.v3"
 )
 
@@ -87,8 +86,8 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 	pquery := client.Collection("patients").Where("patient_id", "==", patientID).Limit(1).Documents(ctx)
 	defer pquery.Stop()
 	dsnap, err := pquery.Next()
-	if err == iterator.Done {
-		fmt.Fprint(w, "No patient found.")
+	if err != nil {
+		fmt.Fprint(w, err.Error())
 		return
 	}
 	fmt.Println("log2")
