@@ -43,8 +43,8 @@ func AskAI(diagnosis string, testList []string, testListStr string) (string, err
 		return "", err
 	}
 
-	// fmt.Println("The response from OpenAI is ",resp.Choices[0].Text);
-	// fmt.Println("\nThe matches Are!!!")
+	fmt.Println("The response from OpenAI is ", resp.Choices[0].Text)
+	fmt.Println("\nThe matches Are!!!")
 
 	matchMap := make(map[string]int)
 
@@ -58,12 +58,12 @@ func AskAI(diagnosis string, testList []string, testListStr string) (string, err
 		}
 	}
 
-	// fmt.Println("\n",matchMap);
+	fmt.Println("\n", matchMap)
 	mapJson, err := json.Marshal(matchMap)
 	if err != nil {
 		fmt.Println(err)
 		return "", err
 	}
-	// fmt.Println("\n",string(mapJson));
+	fmt.Println("\n", string(mapJson))
 	return string(mapJson), nil
 }
