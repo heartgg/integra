@@ -7,6 +7,10 @@
     padding-top: 8px;
 }
 
+.collapse-unsuggested {
+    padding-top: 8px;
+}
+
 /* .patient-info {
    position: sticky;
    align-self: left;
@@ -53,3 +57,12 @@ hr.solid {
     .dropdown-menu > li:hover > .dropdown-submenu {
     display: block;
     }
+
+.not-visible {
+visibility: hidden;
+}
+
+.confirm-btn {
+    background-color: rgb(81, 202, 63) !important;
+    border-color:rgb(66, 137, 54) !important;
+}

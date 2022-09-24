@@ -41,14 +41,19 @@ function updatePatientInfo(data) {
   const infoList = document.getElementById("info-list");
   const examOpts = document.getElementById("exam-opts");
   const excludedOpts = document.getElementById("excluded-opts");
-
+  const loadedDataDiv = document.getElementById("loaded-data-container")
+  const noDataDiv = document.getElementById("no-data-label")
+  const collapseUnsuggestedBtn = document.getElementById("collapseButton");
+  
   let examCheckedCount = 0;
 
   infoList.innerHTML = "";
   examOpts.innerHTML = "";
   excludedOpts.innerHTML = "";
-  examCheckedCount = 0;
-
+  
+  loadedDataDiv.classList.remove("not-visible");
+  noDataDiv.classList.add("not-visible"); 
+  
   for (let key in data.Patient) {
     const tr = document.createElement("tr");
     const tdLeft = document.createElement("td");
@@ -105,6 +110,9 @@ function updatePatientInfo(data) {
     }
     id++;
   }
+
+  collapseUnsuggestedBtn.click(); 
+
 }
 
 function checkDisableButton(buttonId, num) {
@@ -122,7 +130,7 @@ btn.addEventListener("click", function handleClick() {
   const initialText = "Other Exam Options";
 
   if (btn.textContent.toLowerCase().includes(initialText.toLowerCase())) {
-    btn.textContent = "Close";
+    btn.textContent = '˄';
   } else {
     btn.textContent = initialText;
   }
