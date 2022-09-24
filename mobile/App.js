@@ -2,11 +2,14 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import SuccessAnimation from "./SuccessAnimation.js";
 
 export default function App() {
   // camera permissions
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [patientID, setPatientID] = useState(null);
   const [open, setOpen] = useState(false);
   const [modality, setModality] = useState(null);
   const [modalityList, setModalityList] = useState([
@@ -29,12 +32,17 @@ export default function App() {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
+    setPatientID(data);
     // send message to server with scanned patient ID
     try {
-      await fetch(`https://integri-scan.herokuapp.com/scan-exams?modality=${modality}&patientID=${data}`);
-      alert(`Scanned patient ID: ${data}`);
+      await fetch(
+        `https://integri-scan.herokuapp.com/scan-exams?modality=${modality}&patientID=${data}`
+      );
+      setShowSuccess(true);
     } catch (err) {
-      alert("An error occurred when trying to send patient data. Please try again.");
+      alert(
+        "An error occurred when trying to send patient data. Please try again."
+      );
     }
   };
 
@@ -51,12 +59,25 @@ export default function App() {
         <Text>Please scan patient barcode</Text>
       </View>
       <BarCodeScanner
-        onBarCodeScanned={scanned || !modality ? undefined : handleBarCodeScanned}
+        onBarCodeScanned={
+          scanned || !modality ? undefined : handleBarCodeScanned
+        }
         style={StyleSheet.absoluteFillObject}
       />
+      {showSuccess && (
+        <SuccessAnimation
+          onAnimationEnd={() => {
+            alert(`Successfully scanned patient ID: ${patientID}`);
+            setShowSuccess(false);
+          }}
+        />
+      )}
       <View style={styles.selectModality}>
         {scanned && (
-          <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
+          <Button
+            title={"Tap to Scan Again"}
+            onPress={() => setScanned(false)}
+          />
         )}
         <DropDownPicker
           open={open}
@@ -65,8 +86,8 @@ export default function App() {
           setOpen={setOpen}
           setValue={setModality}
           setItems={setModalityList}
-          />
-        </View>
+        />
+      </View>
     </View>
   );
 }
