@@ -19,7 +19,9 @@ func GetAiKey() string {
 	return os.Getenv("OPEN_AI_KEY");
 }
 
-// Given a string like "Lung Cancer", returns string array of possible tests.
+// Given a string like "Lung Cancer", returns a JSON-Encoded Map.
+// Example possible return:
+// {"Angiography":0,"Arthrography":0,"Bone Density Scan":1,"Bone XRAY":0,"Chest XRAY":1,"Crystogram":0,"Fluoroscopy":1,"Mammography":0,"Myelography":0,"Skull Radiography":0,"Virtual Colonoscopy":1}
 func AskAI(diagnosis string, testList [] string, testListStr string) string {
 
 	c := gogpt.NewClient(GetAiKey()) // from .env

@@ -18,6 +18,7 @@ func main() {
 	}
 
 	routes.SetupRoutes()
+	// FIXME: Put diagnosis from patient here Adam
 	utils.AskAI("Cervical Cancer", testList, testListStr);
 	fmt.Println("IntegriScan websocket server is listening on port 8080")
 	http.ListenAndServe(":8080", nil)
