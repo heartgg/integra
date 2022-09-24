@@ -19,7 +19,6 @@ func SetupRoutes() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer client.Close()
 
 	// read the yaml config of all exams and modalities
 	readModalityExams()
