@@ -43,28 +43,29 @@
           <h2>Patient info:</h2>
           <table class="patient-info-table" id="info-list"></table>
         </div>
-      </div>
-      <fieldset class="suggested-exams">
-        <legend>Suggested Exams:</legend>
-
-        <ul class="list-group" id="exam-opts">
-        </ul>
-      </fieldset>
-      
-      <div class="collapse" id="collapseExample">
-        <div class="card card-body">
-          <ul class="list-group" id="excluded-opts">
-
+        <fieldset class="suggested-exams">
+          <legend>Suggested Exams:</legend>
+  
+          <ul class="list-group" id="exam-opts">
           </ul>
+        </fieldset>
+        
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+            <ul class="list-group" id="excluded-opts">
+  
+            </ul>
+          </div>
         </div>
+        <p class="collapse-unsuggested">
+          <a class="btn btn-primary" id="collapseButton" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Other exam options
+          </a>
+          </button>
+        </p>
+        <button type="button" class="confirm-btn btn btn-primary btn-lg" style="margin-top:15px" id="confirm-btn">Submit</button>
       </div>
-      <p class="collapse-unsuggested">
-        <a class="btn btn-primary" id="collapseButton" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-          Other exam options
-        </a>
-        </button>
-      </p>
-      <button type="button" class="confirm-btn btn btn-primary btn-lg" style="margin-top:15px" id="confirm-btn">Submit</button>
+      
     </div>
   </div> </body>
 </html>
