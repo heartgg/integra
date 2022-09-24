@@ -10,11 +10,12 @@ import (
 	"github.com/heartgg/integri-scan/server/pkg/websocket"
 )
 
-var dbClient *firestore.Client
+var client *firestore.Client
 
 func SetupRoutes() {
 	// connect to the DB (client)
-	client, err := db.Init()
+	var err error
+	client, err = db.Init()
 	if err != nil {
 		log.Fatalln(err)
 	}
