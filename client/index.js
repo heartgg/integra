@@ -50,6 +50,7 @@ function updatePatientInfo(msg) {
     li.innerHTML = `${key} : ${msg.patient[key]}`;
     infoList.appendChild(li);
   }
+
   let id = 0;
   for (let key in msg.exams) {
     const li = document.createElement("li");
@@ -69,8 +70,24 @@ function updatePatientInfo(msg) {
     if (isSuggested) {
       examOpts.appendChild(li);
       examCheckedCount = examCheckedCount + 1;
+      checkDisableButton("confirm-btn", examCheckedCount);
     } else {
       excludedOpts.appendChild(li);
+    }
+    let input = li.querySelector("input");
+    if (input != null) {
+      input.addEventListener('input', (event) => {
+      
+        if (input.checked == true) {
+          // Then the user just checked the box
+          examCheckedCount++;
+        }
+        else {
+          // Then the user just unchecked the box
+          examCheckedCount--;
+        }
+        checkDisableButton("confirm-btn",examCheckedCount);
+      });
     }
     id++;
   }
