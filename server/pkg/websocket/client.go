@@ -7,14 +7,17 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+
 type Client struct {
-	ID	 	string
-	Conn 	*websocket.Conn
-	Pool 	*Pool
+	ID       string
+	RoomID   string
+	Modality Modality
+	Conn     *websocket.Conn
+	Pool     *Pool
 }
 
 type Message struct {
-	Type int 
+	Type int
 	Body string
 }
 
@@ -35,4 +38,3 @@ func (c *Client) Read() {
 		fmt.Printf("Message Received: %+v\n", message)
 	}
 }
-
