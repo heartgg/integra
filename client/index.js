@@ -6,6 +6,8 @@ const infoList = document.getElementById("info-list")
 const examOpts = document.getElementById("exam-opts")
 const excludedOpts = document.getElementById("excluded-opts");
 
+let examCheckedCount = 0;
+
 socket.addEventListener('message', (event) => {
   console.log('Message from server ', event.data);
 
@@ -45,18 +47,21 @@ socket.addEventListener('message', (event) => {
   for (let key in msg.exams) {
     const li = document.createElement("li");
     li.setAttribute("class", "list-group-item");
+    const isSuggested = (msg.exams[key] == 1 ? true : false);
     li.innerHTML = `
       <input
         class="form-check-input me-1"
         type="checkbox"
         value=""
+        `+(isSuggested ? 'checked=true' : '')+`
         id="firstCheckbox"
       />
       <label class="form-check-label" for="firstCheckbox"
         >`+key+`</label
       >`;
-      if (msg.exams[key] == 1) {
+      if (isSuggested) {
         examOpts.appendChild(li);
+        examCheckedCount = examCheckedCount + 1;
       }
       else {
         excludedOpts.appendChild(li);
