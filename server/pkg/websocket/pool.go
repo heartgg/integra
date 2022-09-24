@@ -60,6 +60,8 @@ func (pool *Pool) Start() {
 			// get the client of modality
 			for client := range pool.Clients {
 				if message.Type == 2 {
+					fmt.Println(received["modality"])
+					fmt.Println(client.Modality)
 					if received["modality"] == string(client.Modality) {
 						if err := client.Conn.WriteJSON(message); err != nil {
 							fmt.Println(err)

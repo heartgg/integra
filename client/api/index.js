@@ -37,7 +37,7 @@ socket.addEventListener('message', (event) => {
       console.log(msg)
       break;
     case 2:
-      console.log("Message to be processed", msg.Body)
+      console.log("Exams data to be processed", msg.Body)
       break;
     default:
       // skip
