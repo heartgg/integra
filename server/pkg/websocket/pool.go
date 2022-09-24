@@ -42,12 +42,12 @@ func (pool *Pool) Start() {
 
 		case message := <-pool.Broadcast:
 			fmt.Printf("Handling message: %v\n", message)
-			// for client := range pool.Clients {
-			// 	if err := client.Conn.WriteJSON(message); err != nil {
-			// 		fmt.Println(err)
-			// 		return
-			// 	}
-			// }
+			for client := range pool.Clients {
+				if err := client.Conn.WriteJSON(message); err != nil {
+					fmt.Println(err)
+					return
+				}
+			}
 		}
 	}
 }

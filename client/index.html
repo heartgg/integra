@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Workstation</title>
+    <link rel="stylesheet" href="index.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script type="text/javascript" src="index.js" defer></script>
+    <script type="module" src="api/index.js" defer></script>
+  </head>
+
+  <body>
+    <h1>Workstation</h1>
+    <div class="container">
+      <div class="patient-info">
+        <h2>Patient info:</h2>
+        <ul id="info-list">
+          <li>Test</li>
+        </ul>
+      </div>
+    </div>
+
+    <fieldset>
+      <legend>Exams:</legend>
+
+      <ul class="list-group" id="exam-opts">
+        <li class="list-group-item">
+          <input
+            class="form-check-input me-1"
+            type="checkbox"
+            value=""
+            id="firstCheckbox"
+          />
+          <label class="form-check-label" for="firstCheckbox"
+            >First checkbox</label
+          >
+        </li>
+        <li class="list-group-item">
+          <input
+            class="form-check-input me-1"
+            type="checkbox"
+            value=""
+            id="secondCheckbox"
+          />
+          <label class="form-check-label" for="secondCheckbox"
+            >Second checkbox</label
+          >
+        </li>
+        <li class="list-group-item">
+          <input
+            class="form-check-input me-1"
+            type="checkbox"
+            value=""
+            id="thirdCheckbox"
+          />
+          <label class="form-check-label" for="thirdCheckbox"
+            >Third checkbox</label
+          >
+        </li>
+        <li class="list-group-item">
+          <input
+            class="form-check-input me-1"
+            type="checkbox"
+            value=""
+            id="fourthCheckbox"
+          />
+          <label class="form-check-label" for="fourthCheckbox"
+            >Fourth checkbox</label
+          >
+        </li>
+      </ul>
+    </fieldset>
+  </body>
+</html>
