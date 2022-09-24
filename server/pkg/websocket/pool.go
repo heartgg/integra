@@ -25,7 +25,7 @@ func NewPool() *Pool {
 func (pool *Pool) Start() {
 	// keep our workstations connected to heroku
 	go func() {
-		for range time.Tick(time.Second * 2) {
+		for range time.Tick(time.Second * 4) {
 			pool.Broadcast <- Message{Type: 1, Body: "Ping!"}
 		}
 	}()
@@ -46,9 +46,9 @@ func (pool *Pool) Start() {
 			delete(pool.Clients, client)
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
 			// Send message to each user
-			for client := range pool.Clients {
-				client.Conn.WriteJSON(Message{Type: 1, Body: "User Disconnected..."})
-			}
+			// for client := range pool.Clients {
+			// 	client.Conn.WriteJSON(Message{Type: 1, Body: "User Disconnected..."})
+			// }
 			break
 
 		case message := <-pool.Broadcast:
@@ -60,6 +60,8 @@ func (pool *Pool) Start() {
 			// get the client of modality
 			for client := range pool.Clients {
 				if message.Type == 2 {
+					// fmt.Println(received["modality"])
+					// fmt.Println(client.Modality)
 					if received["modality"] == string(client.Modality) {
 						if err := client.Conn.WriteJSON(message); err != nil {
 							fmt.Println(err)
