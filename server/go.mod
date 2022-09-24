@@ -8,7 +8,11 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 )
 
-require cloud.google.com/go/storage v1.10.0 // indirect
+require (
+	cloud.google.com/go/storage v1.10.0 // indirect
+	github.com/joho/godotenv v1.4.0 // indirect
+	github.com/sashabaranov/go-gpt3 v0.0.0-20220811094137-be08f204f03a // indirect
+)
 
 require (
 	cloud.google.com/go v0.97.0 // indirect
