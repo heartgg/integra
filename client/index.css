@@ -26,3 +26,8 @@
 tr:hover {
     background-color: rgb(255, 235, 235);
 }
+
+/* Solid border */
+hr.solid {
+    border-top: 3px solid #bbb;
+  }
