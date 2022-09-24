@@ -25,7 +25,7 @@ func NewPool() *Pool {
 func (pool *Pool) Start() {
 	// keep our workstations connected to heroku
 	go func() {
-		for range time.Tick(time.Second * 2) {
+		for range time.Tick(time.Second * 4) {
 			pool.Broadcast <- Message{Type: 1, Body: "Ping!"}
 		}
 	}()
