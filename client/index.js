@@ -46,13 +46,13 @@ function updatePatientInfo(data) {
   excludedOpts.innerHTML = "";
   examCheckedCount = 0;
 
-  for (let key in msg.Patient) {
+  for (let key in data.Patient) {
     const tr = document.createElement("tr");
     const tdLeft = document.createElement("td");
     const tdRight = document.createElement("td");
     tdLeft.innerHTML = key;
-    tdRight.innerHTML = msg.Patient[key];
-    // li.innerHTML = `${key} : ${msg.Patient[key]}`;
+    tdRight.innerHTML = data.Patient[key];
+    // li.innerHTML = `${key} : ${data.Patient[key]}`;
     tr.appendChild(tdLeft);
     tr.appendChild(tdRight);
     infoList.appendChild(tr);
