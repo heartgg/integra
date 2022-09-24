@@ -31,4 +31,16 @@ export { connect, sendMsg };
 // this actually works
 socket.addEventListener('message', (event) => {
   console.log('Message from server ', event.data);
+  const msg = JSON.parse(event.data);
+  switch (msg.Type) {
+    case 1:
+      console.log(msg)
+      break;
+    case 2:
+      console.log("Message to be processed", msg.Body)
+      break;
+    default:
+      // skip
+      break;
+  }
 });
