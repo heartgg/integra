@@ -3,6 +3,7 @@ package websocket
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 type Pool struct {
@@ -22,6 +23,13 @@ func NewPool() *Pool {
 }
 
 func (pool *Pool) Start() {
+	// keep our workstations connected to heroku
+	go func() {
+		for range time.Tick(time.Second * 2) {
+			pool.Broadcast <- Message{}
+		}
+	}()
+
 	for {
 		select {
 		case client := <-pool.Register:
