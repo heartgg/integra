@@ -53,11 +53,11 @@ socket.addEventListener('message', (event) => {
         class="form-check-input me-1"
         type="checkbox"
         value=""
-        `+(isSuggested ? 'checked=true' : '')+`
+        ${(isSuggested ? 'checked=true' : '')}
         id="firstCheckbox"
       />
       <label class="form-check-label" for="firstCheckbox"
-        >`+key+`</label
+        >${key}</label
       >`;
       if (isSuggested) {
         examOpts.appendChild(li);
