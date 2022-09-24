@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -52,9 +53,20 @@ func (pool *Pool) Start() {
 
 		case message := <-pool.Broadcast:
 			fmt.Printf("Handling message: %v\n", message)
+			var received map[string]string
+			if message.Type == 2 {
+				json.Unmarshal([]byte(message.Body), &received)
+			}
 			// get the client of modality
 			for client := range pool.Clients {
-				if err := client.Conn.WriteJSON(message); err != nil {
+				if message.Type == 2 {
+					if received["modality"] == string(client.Modality) {
+						if err := client.Conn.WriteJSON(message); err != nil {
+							fmt.Println(err)
+							return
+						}
+					}
+				} else if err := client.Conn.WriteJSON(message); err != nil {
 					fmt.Println(err)
 					return
 				}

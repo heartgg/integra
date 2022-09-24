@@ -27,3 +27,8 @@ const sendMsg = (msg) => {
 };
 
 export { connect, sendMsg };
+
+// this actually works
+socket.addEventListener('message', (event) => {
+  console.log('Message from server ', event.data);
+});
