@@ -1,27 +1,104 @@
-import { connect } from "./api";
+console.log("Attempting Connection...");
 
-// connect to websocket and handle messages
-const infoList = document.findById("info-list")
-const examOpts = document.findById("exam-opts")
-connect((msg) => {
-  for (const key of msg.patientData) {
+const socket = new WebSocket(
+  "ws://integri-scan.herokuapp.com/ws?roomID=1234&modality=XRAY"
+);
+
+socket.onopen = () => {
+  console.log("Successfully Connected");
+};
+
+socket.onclose = (event) => {
+  console.log("Socket Closed Connection: ", event);
+};
+
+socket.onerror = (error) => {
+  console.log("Socket Error: ", error);
+};
+
+// handle messages received from server
+socket.onmessage = (event) => {
+  const msg = JSON.parse(event.data);
+  console.log("Message received from server: ", msg);
+  switch (msg.Type) {
+    case 1:
+      break;
+    case 2:
+      updatePatientInfo(JSON.parse(msg.Body));
+      break;
+    default:
+      console.log(`Unknown message type ${msg.Type} received from server`);
+      break;
+  }
+};
+
+// update patient info displayed on page from message received from server
+function updatePatientInfo(data) {
+  const infoList = document.getElementById("info-list");
+  const examOpts = document.getElementById("exam-opts");
+  const excludedOpts = document.getElementById("excluded-opts");
+
+  let examCheckedCount = 0;
+
+  infoList.innerHTML = "";
+  examOpts.innerHTML = "";
+  excludedOpts.innerHTML = "";
+  examCheckedCount = 0;
+
+  for (let key in data.patient) {
     const li = document.createElement("li");
-    li.innerHTML = `${key} : ${msg[key]}`;
+    li.innerHTML = `${key} : ${data.patient[key]}`;
     infoList.appendChild(li);
   }
-  for (const key of msg.examSuggestions) {
+
+  let id = 0;
+  for (let key in data.exams) {
     const li = document.createElement("li");
     li.setAttribute("class", "list-group-item");
+    const isSuggested = data.exams[key] == 1 ? true : false;
     li.innerHTML = `
       <input
         class="form-check-input me-1"
         type="checkbox"
         value=""
-        id="firstCheckbox"
+        ${isSuggested ? "checked=true" : ""}
+        id="checkbox-${id}"
       />
-      <label class="form-check-label" for="firstCheckbox"
-        >First checkbox</label
+      <label class="form-check-label" for="checkbox-${id}"
+        >${key}</label
       >`;
+    if (isSuggested) {
       examOpts.appendChild(li);
-      }
-});
+      examCheckedCount = examCheckedCount + 1;
+      checkDisableButton("confirm-btn", examCheckedCount);
+    } else {
+      excludedOpts.appendChild(li);
+    }
+    let input = li.querySelector("input");
+    if (input != null) {
+      input.addEventListener('input', (event) => {
+      
+        if (input.checked == true) {
+          // Then the user just checked the box
+          examCheckedCount++;
+        }
+        else {
+          // Then the user just unchecked the box
+          examCheckedCount--;
+        }
+        checkDisableButton("confirm-btn",examCheckedCount);
+      });
+    }
+    id++;
+  }
+}
+
+function checkDisableButton(buttonId, num) {
+  const btn = document.getElementById(buttonId);
+  if (num <= 0) {
+    btn.disabled = true;
+  }
+  else {
+    btn.disabled = false;
+  }
+}

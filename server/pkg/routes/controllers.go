@@ -83,7 +83,7 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 	}
 
 	fmt.Println(patientID, modality)
-	// break
+
 	// find the first document matching patient id
 	pquery := client.Collection("patients").Where("patient_id", "==", patientID).Limit(1).Documents(ctx)
 	defer pquery.Stop()
@@ -92,16 +92,15 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 		fmt.Fprint(w, "No patient found.")
 		return
 	}
-	fmt.Println("log2")
+
 	var patient models.Patient
 	err = dsnap.DataTo(&patient)
 	if err != nil {
 		fmt.Fprint(w, err.Error())
 		return
 	}
-	fmt.Println("log3")
 
-	// break ^
+
 	exams, err := utils.AskAI(patient.Diagnosis, modalityExams[modality], modalityExamsStr)
 	if err != nil {
 		fmt.Fprint(w, err.Error())

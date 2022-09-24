@@ -48,9 +48,9 @@ func (pool *Pool) Start() {
 			delete(pool.Clients, client)
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
 			// Send message to each user
-			for client := range pool.Clients {
-				client.Conn.WriteJSON(Message{Type: 1, Body: "User Disconnected..."})
-			}
+			// for client := range pool.Clients {
+			// 	client.Conn.WriteJSON(Message{Type: 1, Body: "User Disconnected..."})
+			// }
 			break
 
 		case message := <-pool.Broadcast:

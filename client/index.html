@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="index.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
       crossorigin="anonymous"
@@ -25,65 +22,35 @@
   </head>
 
   <body>
+    <div class="inner-body">
     <h1>Workstation</h1>
     <div class="container">
       <div class="patient-info">
         <h2>Patient info:</h2>
         <ul id="info-list">
-          <li>Test</li>
         </ul>
       </div>
     </div>
 
-    <fieldset>
-      <legend>Exams:</legend>
+    <fieldset class="suggested-exams">
+      <legend>Suggested Exams:</legend>
 
       <ul class="list-group" id="exam-opts">
-        <li class="list-group-item">
-          <input
-            class="form-check-input me-1"
-            type="checkbox"
-            value=""
-            id="firstCheckbox"
-          />
-          <label class="form-check-label" for="firstCheckbox"
-            >First checkbox</label
-          >
-        </li>
-        <li class="list-group-item">
-          <input
-            class="form-check-input me-1"
-            type="checkbox"
-            value=""
-            id="secondCheckbox"
-          />
-          <label class="form-check-label" for="secondCheckbox"
-            >Second checkbox</label
-          >
-        </li>
-        <li class="list-group-item">
-          <input
-            class="form-check-input me-1"
-            type="checkbox"
-            value=""
-            id="thirdCheckbox"
-          />
-          <label class="form-check-label" for="thirdCheckbox"
-            >Third checkbox</label
-          >
-        </li>
-        <li class="list-group-item">
-          <input
-            class="form-check-input me-1"
-            type="checkbox"
-            value=""
-            id="fourthCheckbox"
-          />
-          <label class="form-check-label" for="fourthCheckbox"
-            >Fourth checkbox</label
-          >
-        </li>
       </ul>
     </fieldset>
-  </body>
+    <p>
+      <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Other exam options
+      </a>
+      </button>
+    </p>
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+        <ul class="list-group" id="excluded-opts">
+
+        </ul>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg" style="margin-top:15px" id="confirm-btn">Confirm Exams</button>
+  </div> </body>
 </html>
