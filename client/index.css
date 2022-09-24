@@ -31,3 +31,7 @@ tr:hover {
 hr.solid {
     border-top: 3px solid #bbb;
   }
+
+.not-visible {
+visibility: hidden;
+}
