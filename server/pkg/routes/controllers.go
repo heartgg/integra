@@ -106,7 +106,11 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 		fmt.Fprint(w, err.Error())
 		return
 	}
-	combined := models.ExamsResult{patient, exams, modality}
+	combined := models.ExamsResult{
+		Patient: patient, 
+		Exams: exams, 
+		Modality: modality,
+	}
 	combinedJson, err := json.Marshal(combined)
 	if err != nil {
 		fmt.Fprint(w, "Error marshalling combined json")
