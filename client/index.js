@@ -44,6 +44,7 @@ socket.addEventListener('message', (event) => {
     li.innerHTML = `${key} : ${msg.patient[key]}`;
     infoList.appendChild(li);
   }
+  let id = 0;
   for (let key in msg.exams) {
     const li = document.createElement("li");
     li.setAttribute("class", "list-group-item");
@@ -54,9 +55,9 @@ socket.addEventListener('message', (event) => {
         type="checkbox"
         value=""
         ${(isSuggested ? 'checked=true' : '')}
-        id="firstCheckbox"
+        id="checkbox-${id}"
       />
-      <label class="form-check-label" for="firstCheckbox"
+      <label class="form-check-label" for="checkbox-${id}"
         >${key}</label
       >`;
       if (isSuggested) {
@@ -66,7 +67,7 @@ socket.addEventListener('message', (event) => {
       else {
         excludedOpts.appendChild(li);
       }
-    
+    id++;
     }
   switch (msg.Type) {
     case 1:
