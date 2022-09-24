@@ -9,3 +9,9 @@ XRAY:
   Mammography,
   Myelography,
   Skull Radiography]
+Fluoro: 
+  [Musculoskeletal Fluoro,
+  Barium Swallow,
+  Fluroscopic Enteroclysis,
+  Fluoroscopic Defecography,
+  Fluoroscopic IVP]

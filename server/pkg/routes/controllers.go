@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"cloud.google.com/go/firestore"
 	"github.com/heartgg/integri-scan/server/models"
@@ -16,8 +17,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var modalityExams map[string][]string
-var modalityExamsStr string
+var modalityExams map[string][]string;
+var modalityExamsStrs = map[string]string{};
 
 func readModalityExams() {
 	yfile, err := ioutil.ReadFile("data/modality.yaml")
@@ -29,9 +30,15 @@ func readModalityExams() {
 	if err2 != nil {
 		log.Fatal(err2)
 	}
-	for i := 0; i < len(modalityExams["XRAY"]); i++ {
-		modalityExamsStr = modalityExamsStr + modalityExams["XRAY"][i] + ", "
+	for key, elem := range modalityExams {
+		if modalityExams[key] != nil {
+			modalityExamsStrs[key] = strings.Join(elem[:],", ")
+		} else {
+			modalityExamsStrs[key] = ""
+		}
 	}
+	
+	// fmt.Println(modalityExamsStrs)
 }
 
 func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
@@ -101,7 +108,7 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 	}
 
 
-	exams, err := utils.AskAI(patient.Diagnosis, modalityExams[modality], modalityExamsStr)
+	exams, err := utils.AskAI(patient.Diagnosis, modalityExams[modality], modalityExamsStrs[modality])
 	if err != nil {
 		fmt.Fprint(w, err.Error())
 		return

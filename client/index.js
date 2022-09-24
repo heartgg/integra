@@ -46,10 +46,7 @@ function updatePatientInfo(data) {
   const collapseUnsuggestedBtn = document.getElementById("collapseButton");
   
   let examCheckedCount = 0;
-
-  infoList.innerHTML = "";
-  examOpts.innerHTML = "";
-  excludedOpts.innerHTML = "";
+  clearWorkstationContent();
   
   loadedDataDiv.classList.remove("not-visible");
   noDataDiv.classList.add("not-visible"); 
@@ -124,6 +121,20 @@ function checkDisableButton(buttonId, num) {
   }
 }
 
+function clearWorkstationContent() {
+  const infoList = document.getElementById("info-list");
+  const examOpts = document.getElementById("exam-opts");
+  const excludedOpts = document.getElementById("excluded-opts");
+  const loadedDataDiv = document.getElementById("loaded-data-container")
+  const noDataDiv = document.getElementById("no-data-label")
+
+  infoList.innerHTML = "";
+  examOpts.innerHTML = "";
+  excludedOpts.innerHTML = "";
+  noDataDiv.classList.remove("not-visible");
+  loadedDataDiv.classList.add("not-visible"); 
+}
+
 const btn = document.getElementById("collapseButton");
 
 btn.addEventListener("click", function handleClick() {
@@ -148,6 +159,7 @@ for (const item of modality) {
     currentSocket.close();
     currentSocket = connectSocket(`ws://integri-scan.herokuapp.com/ws?roomID=1234&modality=${input.text}`);
     headerText = document.getElementById("header-text").innerText = input.innerText + " Workstation";
+    clearWorkstationContent();
   });
   document.getElementById("modality-dropdown").appendChild(li);
 }

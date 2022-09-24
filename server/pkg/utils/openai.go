@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"strings"
+	"fmt"
 
 	gogpt "github.com/sashabaranov/go-gpt3"
 )
@@ -25,11 +26,10 @@ func InitAI() error {
 // Example possible return:
 // {"Angiography":0,"Arthrography":0,"Bone Density Scan":1,"Bone XRAY":0,"Chest XRAY":1,"Crystogram":0,"Fluoroscopy":1,"Mammography":0,"Myelography":0,"Skull Radiography":0,"Virtual Colonoscopy":1}
 func AskAI(diagnosis string, testList []string, testListStr string) (map[string]int, error) {
-
 	ctx := context.Background()
 
 	prompt := "Given " + testListStr + "what are the best exams for a patient with " + diagnosis + "?"
-	// fmt.Println("\n\n\nThe prompt is ", prompt, "\n")
+	fmt.Println("\n\n\nThe prompt is ", prompt, "\n")
 	req := gogpt.CompletionRequest{
 		Model:       "text-babbage-001",
 		MaxTokens:   120,

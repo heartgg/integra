@@ -60,7 +60,9 @@ func (pool *Pool) Start() {
 				json.Unmarshal([]byte(message.Body), &received)
 			}
 			// get the client of modality
+			fmt.Println("Pool is ",pool.Clients);
 			for client := range pool.Clients {
+				fmt.Println("Client modality is ",client.Modality," and received is ",received.Modality)
 				if message.Type == 2 {
 					if received.Modality == string(client.Modality) {
 						if err := client.Conn.WriteJSON(message); err != nil {
