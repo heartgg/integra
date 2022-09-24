@@ -11,12 +11,8 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Printf("Error loading .env\n")
-		return
-	}
-	err = utils.InitAI()
+	godotenv.Load()
+	err := utils.InitAI()
 	if err != nil {
 		fmt.Print(err.Error())
 		return
