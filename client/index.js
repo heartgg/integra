@@ -14,6 +14,7 @@ socket.addEventListener('message', (event) => {
   infoList.innerHTML = '';
   examOpts.innerHTML = '';
   excludedOpts.innerHTML = '';
+  examCheckedCount = 0;
   // FIXME: Change back later to not hard-coded data
   // const msg = JSON.parse(event.data);
   const msg = {
