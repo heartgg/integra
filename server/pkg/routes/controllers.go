@@ -10,11 +10,13 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/heartgg/integri-scan/server/pkg/websocket"
+	"github.com/heartgg/integri-scan/server/pkg/utils"
 	"google.golang.org/api/iterator"
 	"gopkg.in/yaml.v3"
 )
 
 var modalityExams map[string][]string
+var modalityExamsStr string
 
 func readModalityExams() {
 	yfile, err := ioutil.ReadFile("data/modality.yaml")
@@ -25,6 +27,9 @@ func readModalityExams() {
 	err2 := yaml.Unmarshal(yfile, &modalityExams)
 	if err2 != nil {
 		log.Fatal(err2)
+	}
+	for i := 0; i < len(modalityExams["XRAY"]); i++ {
+		modalityExamsStr = modalityExamsStr + modalityExams["XRAY"][i] + ", ";
 	}
 }
 
@@ -93,6 +98,16 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 	var patient Patient
 	dsnap.DataTo(&patient)
 
+	ejson := utils.AskAI(patient.Diagnosis, modalityExams["XRAY"], modalityExamsStr);
+	//FIXME: Make sure that ejson and pjson combine correctly
 	pjson, _ := json.Marshal(patient)
-	pool.Broadcast <- websocket.Message{Body: string(pjson)}
+	combined := make(map[string]string);
+	combined["Patient"]=string(pjson);
+	combined["Exams"]=ejson;
+	combinedJson, err := json.Marshal(combined);
+
+	if (err != nil) {
+		return;
+	}
+	pool.Broadcast <- websocket.Message{Body: string(combinedJson)}
 }
