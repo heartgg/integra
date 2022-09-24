@@ -108,3 +108,15 @@ function checkDisableButton(buttonId, num) {
     btn.disabled = false;
   }
 }
+
+const btn = document.getElementById('collapseButton');
+
+btn.addEventListener('click', function handleClick() {
+  const initialText = 'Other Exam Options';
+
+  if (btn.textContent.toLowerCase().includes(initialText.toLowerCase())) {
+    btn.textContent = 'Close';
+  } else {
+    btn.textContent = initialText;
+  }
+});
