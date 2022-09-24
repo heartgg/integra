@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+
+	"github.com/heartgg/integri-scan/server/models"
 )
 
 type Pool struct {
@@ -53,16 +55,14 @@ func (pool *Pool) Start() {
 
 		case message := <-pool.Broadcast:
 			fmt.Printf("Handling message: %v\n", message)
-			var received map[string]string
+			var received models.ExamsResult
 			if message.Type == 2 {
 				json.Unmarshal([]byte(message.Body), &received)
 			}
 			// get the client of modality
 			for client := range pool.Clients {
 				if message.Type == 2 {
-					// fmt.Println(received["modality"])
-					// fmt.Println(client.Modality)
-					if received["modality"] == string(client.Modality) {
+					if received.Modality == string(client.Modality) {
 						if err := client.Conn.WriteJSON(message); err != nil {
 							fmt.Println(err)
 							return

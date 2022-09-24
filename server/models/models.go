@@ -1,8 +1,12 @@
-package routes
+package models
 
-import (
-	"time"
-)
+import "time"
+
+type ExamsResult struct {
+	Patient  Patient
+	Exams    map[string]int
+	Modality string
+}
 
 type Patient struct {
 	ID        string    `firestore:"patient_id" json:"id"`
