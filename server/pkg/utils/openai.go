@@ -26,7 +26,7 @@ func InitAI() error {
 // Given a string like "Lung Cancer", returns a JSON-Encoded Map.
 // Example possible return:
 // {"Angiography":0,"Arthrography":0,"Bone Density Scan":1,"Bone XRAY":0,"Chest XRAY":1,"Crystogram":0,"Fluoroscopy":1,"Mammography":0,"Myelography":0,"Skull Radiography":0,"Virtual Colonoscopy":1}
-func AskAI(diagnosis string, testList []string, testListStr string) string {
+func AskAI(diagnosis string, testList []string, testListStr string) (string, error) {
 
 	ctx := context.Background()
 
@@ -40,7 +40,7 @@ func AskAI(diagnosis string, testList []string, testListStr string) string {
 	}
 	resp, err := c.CreateCompletion(ctx, req)
 	if err != nil {
-		return ""
+		return "", err
 	}
 
 	// fmt.Println("The response from OpenAI is ",resp.Choices[0].Text);
@@ -62,8 +62,8 @@ func AskAI(diagnosis string, testList []string, testListStr string) string {
 	mapJson, err := json.Marshal(matchMap)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return "", err
 	}
 	// fmt.Println("\n",string(mapJson));
-	return string(mapJson)
+	return string(mapJson), nil
 }
