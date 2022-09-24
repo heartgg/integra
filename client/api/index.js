@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://integri-scan.herokuapp.com//ws?roomID=1234&modality=XRAY");
+const socket = new WebSocket("ws://integri-scan.herokuapp.com/ws?roomID=1234&modality=XRAY");
 
 const connect = callback => {
   console.log("Attempting Connection...");
