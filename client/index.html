@@ -1,23 +1,50 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
  
-<head>
-  <meta charset="utf-8">
-  <title>Workstation</title>
-  <link rel="stylesheet" href="index.css">
-</head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Workstation</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+  </head>
  
-<body>
-  <h1>Workstation</h1>
-  <div class="container">
-  <div class="patient-info">
-    <h2>Patient info:</h2>
-    <ul id="info-list">
-    </ul>
-  </div>
-  </div>
-  <script type="text/javascript" src="index.js"></script>
-  <script type="text/javascript" src="api/index.js"></script>
-</body>
- 
+  <body>
+    <h1>Workstation</h1>
+    <div class="container">
+    <div class="patient-info">
+      <h2>Patient info:</h2>
+      <ul id="info-list">
+        <li>Test</li>
+      </ul>
+    </div>
+    </div>
+
+    <fieldset>
+      <legend>Exams:</legend>
+  
+      <div>
+        <div class="input-group mb-3">
+          <div class="input-group-text">
+            <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+          </div>
+          <input type="text" class="form-control" aria-label="Text input with checkbox">
+        </div>
+        <!-- <input type="checkbox" id="scales" name="scales"
+               checked>
+        <label for="scales">Scales</label>
+      </div>
+  
+      <div>
+        <input type="checkbox" id="horns" name="horns">
+        <label for="horns">Horns</label> -->
+      </div>
+  </fieldset>
+
+
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="api/index.js"></script>
+    <script src= "https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+
 </html>
