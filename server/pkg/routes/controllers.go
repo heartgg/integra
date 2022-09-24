@@ -84,7 +84,7 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 	// break
 	// find the first document matching patient id
 	pquery := client.Collection("patients").Where("patient_id", "==", patientID).Limit(1).Documents(ctx)
-	fmt.Println(client)
+	fmt.Println(pquery)
 	defer pquery.Stop()
 	dsnap, err := pquery.Next()
 	if err != nil {
