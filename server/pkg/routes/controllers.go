@@ -9,8 +9,8 @@ import (
 	"net/http"
 
 	"cloud.google.com/go/firestore"
-	"github.com/heartgg/integri-scan/server/pkg/websocket"
 	"github.com/heartgg/integri-scan/server/pkg/utils"
+	"github.com/heartgg/integri-scan/server/pkg/websocket"
 	"google.golang.org/api/iterator"
 	"gopkg.in/yaml.v3"
 )
@@ -29,7 +29,7 @@ func readModalityExams() {
 		log.Fatal(err2)
 	}
 	for i := 0; i < len(modalityExams["XRAY"]); i++ {
-		modalityExamsStr = modalityExamsStr + modalityExams["XRAY"][i] + ", ";
+		modalityExamsStr = modalityExamsStr + modalityExams["XRAY"][i] + ", "
 	}
 }
 
@@ -81,27 +81,30 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 		return
 	}
 
+	fmt.Println(patientID, modality)
+
 	// find the first document matching patient id
 	pquery := client.Collection("patients").Where("patient_id", "==", patientID).Limit(1).Documents(ctx)
 	defer pquery.Stop()
 	dsnap, err := pquery.Next()
 	if err == iterator.Done {
 		fmt.Fprint(w, "No patient found.")
+		return
 	}
 
 	var patient Patient
 	dsnap.DataTo(&patient)
 
-	ejson := utils.AskAI(patient.Diagnosis, modalityExams["XRAY"], modalityExamsStr);
+	ejson := utils.AskAI(patient.Diagnosis, modalityExams["XRAY"], modalityExamsStr)
 	//FIXME: Make sure that ejson and pjson combine correctly
 	pjson, _ := json.Marshal(patient)
-	combined := make(map[string]string);
-	combined["Patient"]=string(pjson);
-	combined["Exams"]=ejson;
-	combinedJson, err := json.Marshal(combined);
+	combined := make(map[string]string)
+	combined["Patient"] = string(pjson)
+	combined["Exams"] = ejson
+	combinedJson, err := json.Marshal(combined)
 
-	if (err != nil) {
-		return;
+	if err != nil {
+		return
 	}
 	pool.Broadcast <- websocket.Message{Body: string(combinedJson)}
 }
