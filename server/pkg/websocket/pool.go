@@ -1,6 +1,10 @@
 package websocket
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"time"
+)
 
 type Pool struct {
 	Register   chan *Client
@@ -19,6 +23,13 @@ func NewPool() *Pool {
 }
 
 func (pool *Pool) Start() {
+	// keep our workstations connected to heroku
+	go func() {
+		for range time.Tick(time.Second * 2) {
+			pool.Broadcast <- Message{Type: 1, Body: "Ping!"}
+		}
+	}()
+
 	for {
 		select {
 		case client := <-pool.Register:
@@ -42,12 +53,24 @@ func (pool *Pool) Start() {
 
 		case message := <-pool.Broadcast:
 			fmt.Printf("Handling message: %v\n", message)
-			// for client := range pool.Clients {
-			// 	if err := client.Conn.WriteJSON(message); err != nil {
-			// 		fmt.Println(err)
-			// 		return
-			// 	}
-			// }
+			var received map[string]string
+			if message.Type == 2 {
+				json.Unmarshal([]byte(message.Body), &received)
+			}
+			// get the client of modality
+			for client := range pool.Clients {
+				if message.Type == 2 {
+					if received["modality"] == string(client.Modality) {
+						if err := client.Conn.WriteJSON(message); err != nil {
+							fmt.Println(err)
+							return
+						}
+					}
+				} else if err := client.Conn.WriteJSON(message); err != nil {
+					fmt.Println(err)
+					return
+				}
+			}
 		}
 	}
 }

@@ -1,11 +1,37 @@
 package routes
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 
+	"cloud.google.com/go/firestore"
+	"github.com/heartgg/integri-scan/server/pkg/utils"
 	"github.com/heartgg/integri-scan/server/pkg/websocket"
+	"google.golang.org/api/iterator"
+	"gopkg.in/yaml.v3"
 )
+
+var modalityExams map[string][]string
+var modalityExamsStr string
+
+func readModalityExams() {
+	yfile, err := ioutil.ReadFile("data/modality.yaml")
+	if err != nil {
+		log.Fatal(err)
+	}
+	modalityExams = make(map[string][]string)
+	err2 := yaml.Unmarshal(yfile, &modalityExams)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+	for i := 0; i < len(modalityExams["XRAY"]); i++ {
+		modalityExamsStr = modalityExamsStr + modalityExams["XRAY"][i] + ", "
+	}
+}
 
 func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("WebSocket Endpoint Hit")
@@ -36,4 +62,58 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 
 	pool.Register <- client
 	client.Read()
+}
+
+// controller for getting a scanned barcode id
+func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
+	patientID := r.URL.Query().Get("patientID")
+	modality := r.URL.Query().Get("modality")
+
+	ctx := context.Background()
+
+	if patientID == "" {
+		fmt.Fprint(w, "Parameter 'patientID' is required")
+		return
+	}
+
+	if modality == "" {
+		fmt.Fprint(w, "Parameter 'modality' is required")
+		return
+	}
+
+	fmt.Println(patientID, modality)
+
+	// find the first document matching patient id
+	pquery := client.Collection("patients").Where("patient_id", "==", patientID).Limit(1).Documents(ctx)
+	defer pquery.Stop()
+	dsnap, err := pquery.Next()
+	if err == iterator.Done {
+		fmt.Fprint(w, "No patient found.")
+		return
+	}
+
+	var patient Patient
+	err = dsnap.DataTo(&patient)
+	if err != nil {
+		fmt.Fprint(w, err.Error())
+		return
+	}
+
+	ejson := utils.AskAI(patient.Diagnosis, modalityExams[modality], modalityExamsStr)
+	pjson, err := json.Marshal(patient)
+	if err != nil {
+		fmt.Fprint(w, "Error marshalling pjson")
+		return
+	}
+	combined := make(map[string]string)
+	combined["patient"] = string(pjson)
+	combined["exams"] = ejson
+	combined["modality"] = modality
+	combinedJson, err := json.Marshal(combined)
+	if err != nil {
+		fmt.Fprint(w, "Error marshalling combined json")
+		return
+	}
+
+	pool.Broadcast <- websocket.Message{Body: string(combinedJson)}
 }

@@ -14,11 +14,14 @@ var client *firestore.Client
 
 func SetupRoutes() {
 	// connect to the DB (client)
-	client, err := db.Init()
+	var err error
+	client, err = db.Init()
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer client.Close()
+
+	// read the yaml config of all exams and modalities
+	readModalityExams()
 
 	pool := websocket.NewPool()
 	go pool.Start()
@@ -30,5 +33,10 @@ func SetupRoutes() {
 	// /ws?roomID=<RoomID>&modality=<Modality>
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(pool, w, r)
+	})
+
+	// /scan-exams?patientID=<patientID>&modality=<modality>
+	http.HandleFunc("/scan-exams", func(w http.ResponseWriter, r *http.Request) {
+		scanExamsHandler(client, pool, w, r)
 	})
 }

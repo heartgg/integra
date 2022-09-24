@@ -5,6 +5,9 @@ go 1.18
 require (
 	cloud.google.com/go/firestore v1.6.1
 	github.com/gorilla/websocket v1.5.0
+	github.com/joho/godotenv v1.4.0
+	github.com/sashabaranov/go-gpt3 v0.0.0-20220811094137-be08f204f03a
+	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 )
 
 require cloud.google.com/go/storage v1.10.0 // indirect
