@@ -40,8 +40,8 @@ function updatePatientInfo(data) {
   const excludedOpts = document.getElementById("excluded-opts");
   const loadedDataDiv = document.getElementById("loaded-data-container")
   const noDataDiv = document.getElementById("no-data-label")
-
-  console.log(noDataDiv,loadedDataDiv);
+  const collapseUnsuggestedBtn = document.getElementById("collapseButton");
+  
   let examCheckedCount = 0;
 
   infoList.innerHTML = "";
@@ -101,6 +101,9 @@ function updatePatientInfo(data) {
     }
     id++;
   }
+
+  collapseUnsuggestedBtn.click(); 
+
 }
 
 function checkDisableButton(buttonId, num) {
@@ -118,7 +121,7 @@ btn.addEventListener('click', function handleClick() {
   const initialText = 'Other Exam Options';
 
   if (btn.textContent.toLowerCase().includes(initialText.toLowerCase())) {
-    btn.textContent = 'Close';
+    btn.textContent = '˄';
   } else {
     btn.textContent = initialText;
   }

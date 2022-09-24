@@ -42,12 +42,7 @@
         <ul class="list-group" id="exam-opts">
         </ul>
       </fieldset>
-      <p>
-        <a class="btn btn-primary" id="collapseButton" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-          Other exam options
-        </a>
-        </button>
-      </p>
+      
       <div class="collapse" id="collapseExample">
         <div class="card card-body">
           <ul class="list-group" id="excluded-opts">
@@ -55,7 +50,13 @@
           </ul>
         </div>
       </div>
-      <button type="button" class="btn btn-primary btn-lg" style="margin-top:15px" id="confirm-btn">Confirm Exams</button>
+      <p class="collapse-unsuggested">
+        <a class="btn btn-primary" id="collapseButton" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+          Other exam options
+        </a>
+        </button>
+      </p>
+      <button type="button" class="confirm-btn btn btn-primary btn-lg" style="margin-top:15px" id="confirm-btn">Submit</button>
     </div>
   </div> </body>
 </html>
