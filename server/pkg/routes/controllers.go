@@ -83,10 +83,15 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 	fmt.Println(patientID, modality)
 	// break
 	// find the first document matching patient id
-	pquery := client.Collection("patients").Where("patient_id", "==", patientID).Limit(1).Documents(ctx)
-	fmt.Println(pquery)
-	defer pquery.Stop()
-	dsnap, err := pquery.Next()
+	// pquery := client.Collection("patients").Where("patient_id", "==", patientID).Limit(1).Documents(ctx)
+	// defer pquery.Stop()
+	// dsnap, err := pquery.Next()
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// 	fmt.Fprint(w, err.Error())
+	// 	return
+	// }
+	dsnap, err := client.Collection("patients").Doc("2HrVKRyjGiPewZiBLn2I").Get(ctx)
 	if err != nil {
 		fmt.Println(err.Error())
 		fmt.Fprint(w, err.Error())
