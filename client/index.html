@@ -23,15 +23,14 @@
 
   <body>
     <div class="inner-body">
-    <h1>Workstation</h1>
+    <h1>X-RAY Workstation</h1>
+    <hr class="solid"></hr>
     <div class="container">
       <div class="patient-info">
         <h2>Patient info:</h2>
-        <ul id="info-list">
-        </ul>
+        <table class="patient-info-table" id="info-list"></table>
       </div>
     </div>
-
     <fieldset class="suggested-exams">
       <legend>Suggested Exams:</legend>
 
@@ -39,7 +38,7 @@
       </ul>
     </fieldset>
     <p>
-      <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+      <a class="btn btn-primary" id="collapseButton" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         Other exam options
       </a>
       </button>

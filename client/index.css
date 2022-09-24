@@ -4,4 +4,30 @@
 
 .suggested-exams {
     padding-bottom: 20px;
+    padding-top: 8px;
 }
+
+/* .patient-info {
+   position: sticky;
+   align-self: left;
+} */
+
+.patient-info-table {
+    width:100%;
+}
+
+.patient-info-table, th, td {
+    border: 2px groove;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-block: 4px;
+}
+
+tr:hover {
+    background-color: rgb(255, 235, 235);
+}
+
+/* Solid border */
+hr.solid {
+    border-top: 3px solid #bbb;
+  }
