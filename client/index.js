@@ -51,9 +51,15 @@ socket.addEventListener('message', (event) => {
   };
 
   for (let key in msg.patient) {
-    const li = document.createElement("li");
-    li.innerHTML = `${key} : ${msg.patient[key]}`;
-    infoList.appendChild(li);
+    const tr = document.createElement("tr");
+    const tdLeft = document.createElement("td");
+    const tdRight = document.createElement("td");
+    tdLeft.innerHTML = key;
+    tdRight.innerHTML = msg.patient[key];
+    // li.innerHTML = `${key} : ${msg.patient[key]}`;
+    tr.appendChild(tdLeft);
+    tr.appendChild(tdRight);
+    infoList.appendChild(tr);
   }
 
   let id = 0;
