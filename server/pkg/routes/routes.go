@@ -37,6 +37,6 @@ func SetupRoutes() {
 
 	// /scan-exams?patientID=<patientID>&modality=<modality>
 	http.HandleFunc("/scan-exams", func(w http.ResponseWriter, r *http.Request) {
-		scanExamsHandler(dbClient, pool, w, r)
+		scanExamsHandler(client, pool, w, r)
 	})
 }
