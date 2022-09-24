@@ -34,6 +34,7 @@ socket.onmessage = (event) => {
 
 // update patient info displayed on page from message received from server
 function updatePatientInfo(data) {
+  console.log(data);
   const infoList = document.getElementById("info-list");
   const examOpts = document.getElementById("exam-opts");
   const excludedOpts = document.getElementById("excluded-opts");
@@ -45,23 +46,23 @@ function updatePatientInfo(data) {
   excludedOpts.innerHTML = "";
   examCheckedCount = 0;
 
-  for (let key in msg.patient) {
+  for (let key in msg.Patient) {
     const tr = document.createElement("tr");
     const tdLeft = document.createElement("td");
     const tdRight = document.createElement("td");
     tdLeft.innerHTML = key;
-    tdRight.innerHTML = msg.patient[key];
-    // li.innerHTML = `${key} : ${msg.patient[key]}`;
+    tdRight.innerHTML = msg.Patient[key];
+    // li.innerHTML = `${key} : ${msg.Patient[key]}`;
     tr.appendChild(tdLeft);
     tr.appendChild(tdRight);
     infoList.appendChild(tr);
   }
 
   let id = 0;
-  for (let key in data.exams) {
+  for (let key in data.Exams) {
     const li = document.createElement("li");
     li.setAttribute("class", "list-group-item");
-    const isSuggested = data.exams[key] == 1 ? true : false;
+    const isSuggested = data.Exams[key] == 1 ? true : false;
     li.innerHTML = `
       <input
         class="form-check-input me-1"
@@ -82,17 +83,15 @@ function updatePatientInfo(data) {
     }
     let input = li.querySelector("input");
     if (input != null) {
-      input.addEventListener('input', (event) => {
-      
+      input.addEventListener("input", (event) => {
         if (input.checked == true) {
           // Then the user just checked the box
           examCheckedCount++;
-        }
-        else {
+        } else {
           // Then the user just unchecked the box
           examCheckedCount--;
         }
-        checkDisableButton("confirm-btn",examCheckedCount);
+        checkDisableButton("confirm-btn", examCheckedCount);
       });
     }
     id++;
@@ -103,8 +102,7 @@ function checkDisableButton(buttonId, num) {
   const btn = document.getElementById(buttonId);
   if (num <= 0) {
     btn.disabled = true;
-  }
-  else {
+  } else {
     btn.disabled = false;
   }
 }
