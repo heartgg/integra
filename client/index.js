@@ -50,8 +50,14 @@ function updatePatientInfo(data) {
     const tr = document.createElement("tr");
     const tdLeft = document.createElement("td");
     const tdRight = document.createElement("td");
-    tdLeft.innerHTML = key;
-    tdRight.innerHTML = data.Patient[key];
+    tdLeft.innerHTML = key[0].toUpperCase() + key.substring(1);
+    if (key == "sex") {
+      tdRight.innerHTML = data.Patient[key] ? "Male" : "Female";
+    } else if (key == "birthdate") {
+      tdRight.innerHTML = data.Patient[key].split("T")[0];
+    } else {
+      tdRight.innerHTML = data.Patient[key];
+    }
     // li.innerHTML = `${key} : ${data.Patient[key]}`;
     tr.appendChild(tdLeft);
     tr.appendChild(tdRight);
@@ -107,13 +113,13 @@ function checkDisableButton(buttonId, num) {
   }
 }
 
-const btn = document.getElementById('collapseButton');
+const btn = document.getElementById("collapseButton");
 
-btn.addEventListener('click', function handleClick() {
-  const initialText = 'Other Exam Options';
+btn.addEventListener("click", function handleClick() {
+  const initialText = "Other Exam Options";
 
   if (btn.textContent.toLowerCase().includes(initialText.toLowerCase())) {
-    btn.textContent = 'Close';
+    btn.textContent = "Close";
   } else {
     btn.textContent = initialText;
   }
