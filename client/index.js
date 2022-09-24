@@ -1,36 +1,39 @@
 console.log("Attempting Connection...");
 
-const socket = new WebSocket(
-  "ws://integri-scan.herokuapp.com/ws?roomID=1234&modality=XRAY"
-);
+function connectSocket(url) {
+  const socket = new WebSocket(url);
+  
+  socket.onopen = () => {
+    console.log("Successfully Connected");
+  };
+  
+  socket.onclose = (event) => {
+    console.log("Socket Closed Connection: ", event);
+  };
+  
+  socket.onerror = (error) => {
+    console.log("Socket Error: ", error);
+  };
+  
+  // handle messages received from server
+  socket.onmessage = (event) => {
+    const msg = JSON.parse(event.data);
+    console.log("Message received from server: ", msg);
+    switch (msg.Type) {
+      case 1:
+        break;
+      case 2:
+        updatePatientInfo(JSON.parse(msg.Body));
+        break;
+      default:
+        console.log(`Unknown message type ${msg.Type} received from server`);
+        break;
+    }
+  };
+  return socket;
+}
 
-socket.onopen = () => {
-  console.log("Successfully Connected");
-};
-
-socket.onclose = (event) => {
-  console.log("Socket Closed Connection: ", event);
-};
-
-socket.onerror = (error) => {
-  console.log("Socket Error: ", error);
-};
-
-// handle messages received from server
-socket.onmessage = (event) => {
-  const msg = JSON.parse(event.data);
-  console.log("Message received from server: ", msg);
-  switch (msg.Type) {
-    case 1:
-      break;
-    case 2:
-      updatePatientInfo(JSON.parse(msg.Body));
-      break;
-    default:
-      console.log(`Unknown message type ${msg.Type} received from server`);
-      break;
-  }
-};
+var currentSocket = connectSocket("ws://integri-scan.herokuapp.com/ws?roomID=1234&modality=XRAY");
 
 // update patient info displayed on page from message received from server
 function updatePatientInfo(data) {
@@ -124,3 +127,19 @@ btn.addEventListener("click", function handleClick() {
     btn.textContent = initialText;
   }
 });
+
+const modality = ["IE", "Fluoro", "XRAY", "CT", "IR", "MRI", "US", "Dexa", "NucMed"]
+
+for (const item of modality) {
+  const li = document.createElement("li");
+  li.setAttribute("class", "dropdown-item");
+  li.innerHTML = `
+  <a class="dropdown-item" href="#">${item}</a>`;
+  let input = li.querySelector("a");
+  input.addEventListener("click", () =>{
+    currentSocket.close();
+    currentSocket = connectSocket(`ws://integri-scan.herokuapp.com/ws?roomID=1234&modality=${input.text}`);
+    headerText = document.getElementById("header-text").innerText = input.innerText + " Workstation";
+  });
+  document.getElementById("modality-dropdown").appendChild(li);
+}
