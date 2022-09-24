@@ -115,5 +115,5 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 		return
 	}
 
-	pool.Broadcast <- websocket.Message{Body: string(combinedJson)}
+	pool.Broadcast <- websocket.Message{Type: 2, Body: string(combinedJson)}
 }
