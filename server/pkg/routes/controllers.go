@@ -99,7 +99,11 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 		return
 	}
 
-	ejson := utils.AskAI(patient.Diagnosis, modalityExams[modality], modalityExamsStr)
+	ejson, err := utils.AskAI(patient.Diagnosis, modalityExams[modality], modalityExamsStr)
+	if err != nil {
+		fmt.Fprint(w, err.Error())
+		return
+	}
 	pjson, err := json.Marshal(patient)
 	if err != nil {
 		fmt.Fprint(w, "Error marshalling pjson")
@@ -115,5 +119,5 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 		return
 	}
 
-	pool.Broadcast <- websocket.Message{Body: string(combinedJson)}
+	pool.Broadcast <- websocket.Message{Type: 2, Body: string(combinedJson)}
 }

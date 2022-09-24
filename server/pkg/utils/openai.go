@@ -26,12 +26,12 @@ func InitAI() error {
 // Given a string like "Lung Cancer", returns a JSON-Encoded Map.
 // Example possible return:
 // {"Angiography":0,"Arthrography":0,"Bone Density Scan":1,"Bone XRAY":0,"Chest XRAY":1,"Crystogram":0,"Fluoroscopy":1,"Mammography":0,"Myelography":0,"Skull Radiography":0,"Virtual Colonoscopy":1}
-func AskAI(diagnosis string, testList []string, testListStr string) string {
+func AskAI(diagnosis string, testList []string, testListStr string) (string, error) {
 
 	ctx := context.Background()
 
 	prompt := "Given " + testListStr + "what are the best exams for a patient with " + diagnosis + "?"
-	// fmt.Println("\n\n\nThe prompt is ",prompt,"\n");
+	// fmt.Println("\n\n\nThe prompt is ", prompt, "\n")
 	req := gogpt.CompletionRequest{
 		Model:       "text-babbage-001",
 		MaxTokens:   120,
@@ -40,10 +40,10 @@ func AskAI(diagnosis string, testList []string, testListStr string) string {
 	}
 	resp, err := c.CreateCompletion(ctx, req)
 	if err != nil {
-		return ""
+		return "", err
 	}
 
-	// fmt.Println("The response from OpenAI is ",resp.Choices[0].Text);
+	// fmt.Println("The response from OpenAI is ", resp.Choices[0].Text)
 	// fmt.Println("\nThe matches Are!!!")
 
 	matchMap := make(map[string]int)
@@ -51,19 +51,19 @@ func AskAI(diagnosis string, testList []string, testListStr string) string {
 	lowerResp := strings.ToLower(resp.Choices[0].Text)
 	for i := 0; i < len(testList); i++ {
 		if strings.Contains(lowerResp, strings.ToLower(testList[i])) {
-			fmt.Println(testList[i])
+			// fmt.Println(testList[i])
 			matchMap[testList[i]] = 1
 		} else {
 			matchMap[testList[i]] = 0
 		}
 	}
 
-	// fmt.Println("\n",matchMap);
+	// fmt.Println("\n", matchMap)
 	mapJson, err := json.Marshal(matchMap)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return "", err
 	}
-	// fmt.Println("\n",string(mapJson));
-	return string(mapJson)
+	// fmt.Println("\n", string(mapJson))
+	return string(mapJson), nil
 }
