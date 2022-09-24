@@ -1,15 +1,8 @@
 {
   "expo": {
-    "name": "ReactApp",
-    "plugins": [
-      [
-        "react-native-vision-camera",
-        {
-          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
-        }
-      ]
-    ],
-    "slug": "ReactApp",
+    "name": "IntegriScan",
+    "owner": "bradwj",
+    "slug": "integri-scan",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

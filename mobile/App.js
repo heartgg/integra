@@ -10,14 +10,14 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const [modality, setModality] = useState(null);
   const [modalityList, setModalityList] = useState([
-    { label: "IE Fluoro", value: "IE Fluoro" },
+    { label: "IE Fluoro", value: "Fluoro" },
     { label: "XRAY", value: "XRAY" },
     { label: "CT", value: "CT" },
     { label: "IR", value: "IR" },
     { label: "MRI", value: "MRI" },
     { label: "US", value: "US" },
     { label: "Dexa", value: "Dexa" },
-    { label: "Nuc Med", value: "Nuc Med" },
+    { label: "Nuc Med", value: "NucMed" },
   ]);
 
   useEffect(() => {
@@ -27,11 +27,15 @@ export default function App() {
     })();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
     // send message to server with scanned patient ID
-    alert(`${data}`);
-    fetch(`http://localhost:8080/scan-exams?modality=${modality}&patientID=${data}`);
+    try {
+      await fetch(`https://integri-scan.herokuapp.com/scan-exams?modality=${modality}&patientID=${data}`);
+      alert(`Scanned patient ID: ${data}`);
+    } catch (err) {
+      alert("An error occurred when trying to send patient data. Please try again.");
+    }
   };
 
   if (hasPermission === null) {
