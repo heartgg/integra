@@ -8,6 +8,16 @@ const excludedOpts = document.getElementById("excluded-opts");
 
 let examCheckedCount = 0;
 
+function checkDisableButton(buttonId, num) {
+  const btn = document.getElementById(buttonId);
+  if (num <= 0) {
+    btn.disabled = true;
+  }
+  else {
+    btn.disabled = false;
+  }
+}
+
 socket.addEventListener('message', (event) => {
   console.log('Message from server ', event.data);
 
@@ -45,6 +55,7 @@ socket.addEventListener('message', (event) => {
     li.innerHTML = `${key} : ${msg.patient[key]}`;
     infoList.appendChild(li);
   }
+
   let id = 0;
   for (let key in msg.exams) {
     const li = document.createElement("li");
@@ -60,16 +71,35 @@ socket.addEventListener('message', (event) => {
       />
       <label class="form-check-label" for="checkbox-${id}"
         >${key}</label
-      >`;
-      if (isSuggested) {
-        examOpts.appendChild(li);
-        examCheckedCount = examCheckedCount + 1;
-      }
-      else {
-        excludedOpts.appendChild(li);
-      }
-    id++;
+    >`;
+    if (isSuggested) {
+      examOpts.appendChild(li);
+      examCheckedCount++;
+      checkDisableButton("confirm-btn",examCheckedCount);
     }
+    else {
+      excludedOpts.appendChild(li);
+    }
+    let input = li.querySelector("input");
+    if (input != null) {
+      input.addEventListener('input', (event) => {
+      
+        if (input.checked == true) {
+          // Then the user just checked the box
+          examCheckedCount++;
+        }
+        else {
+          // Then the user just unchecked the box
+          examCheckedCount--;
+        }
+        checkDisableButton("confirm-btn",examCheckedCount);
+        // console.log("Currently checked box count: ",examCheckedCount);
+      });
+    }
+
+    id++;
+  }
+
   switch (msg.Type) {
     case 1:
       console.log(msg)
