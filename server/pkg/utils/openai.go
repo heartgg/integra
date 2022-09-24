@@ -31,7 +31,7 @@ func AskAI(diagnosis string, testList []string, testListStr string) (string, err
 	ctx := context.Background()
 
 	prompt := "Given " + testListStr + "what are the best exams for a patient with " + diagnosis + "?"
-	// fmt.Println("\n\n\nThe prompt is ",prompt,"\n");
+	fmt.Println("\n\n\nThe prompt is ", prompt, "\n")
 	req := gogpt.CompletionRequest{
 		Model:       "text-babbage-001",
 		MaxTokens:   120,
