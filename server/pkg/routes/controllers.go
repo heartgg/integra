@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"cloud.google.com/go/firestore"
 	"github.com/heartgg/integri-scan/server/models"
@@ -17,7 +18,7 @@ import (
 )
 
 var modalityExams map[string][]string
-var modalityExamsStr string
+var modalityExamsStr map[string]string
 
 func readModalityExams() {
 	yfile, err := ioutil.ReadFile("data/modality.yaml")
@@ -25,12 +26,13 @@ func readModalityExams() {
 		log.Fatal(err)
 	}
 	modalityExams = make(map[string][]string)
-	err2 := yaml.Unmarshal(yfile, &modalityExams)
-	if err2 != nil {
-		log.Fatal(err2)
+	err = yaml.Unmarshal(yfile, &modalityExams)
+	if err != nil {
+		log.Fatal(err)
 	}
-	for i := 0; i < len(modalityExams["XRAY"]); i++ {
-		modalityExamsStr = modalityExamsStr + modalityExams["XRAY"][i] + ", "
+	modalityExamsStr = make(map[string]string)
+	for key, val := range modalityExams {
+		modalityExamsStr[key] = strings.Join(val[:], ", ")
 	}
 }
 
@@ -100,15 +102,14 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 		return
 	}
 
-
-	exams, err := utils.AskAI(patient.Diagnosis, modalityExams[modality], modalityExamsStr)
+	exams, err := utils.AskAI(patient.Diagnosis, modalityExams[modality], modalityExamsStr[modality])
 	if err != nil {
 		fmt.Fprint(w, err.Error())
 		return
 	}
 	combined := models.ExamsResult{
-		Patient: patient, 
-		Exams: exams, 
+		Patient:  patient,
+		Exams:    exams,
 		Modality: modality,
 	}
 	combinedJson, err := json.Marshal(combined)
