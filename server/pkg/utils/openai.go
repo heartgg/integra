@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"encoding/json"
 	gogpt "github.com/sashabaranov/go-gpt3"
 	"github.com/joho/godotenv"
 )
@@ -19,13 +20,13 @@ func GetAiKey() string {
 }
 
 // Given a string like "Lung Cancer", returns string array of possible tests.
-func AskAI(diagnosis string, testList [] string, testListStr string) []string {
+func AskAI(diagnosis string, testList [] string, testListStr string) string {
 
 	c := gogpt.NewClient(GetAiKey()) // from .env
 	ctx := context.Background()
 
 	prompt := "Given "+testListStr+"what are the best exams for a patient with "+diagnosis+"?";
-	fmt.Println("\n\n\nThe prompt is ",prompt,"\n");
+	// fmt.Println("\n\n\nThe prompt is ",prompt,"\n");
 	req := gogpt.CompletionRequest{
 		Model: "text-babbage-001",
 		MaxTokens: 120,
@@ -34,26 +35,30 @@ func AskAI(diagnosis string, testList [] string, testListStr string) []string {
 	}
 	resp, err := c.CreateCompletion(ctx, req)
 	if err != nil {
-		return nil;
+		return "";
 	}
 	
-	fmt.Println("The response from OpenAI is ",resp.Choices[0].Text);
-	fmt.Println("\nThe matches Are!!!")
+	// fmt.Println("The response from OpenAI is ",resp.Choices[0].Text);
+	// fmt.Println("\nThe matches Are!!!")
 
-	matchList := make([]string,0);
-	noMatchList := make([]string,0);
+	matchMap := make(map[string]int)
 
 	lowerResp := strings.ToLower(resp.Choices[0].Text);
 	for i := 0; i < len(testList); i++ {
 		if (strings.Contains(lowerResp,strings.ToLower(testList[i]))) {
 			fmt.Println(testList[i]);
-			matchList = append(matchList,testList[i]);
+			matchMap[testList[i]]=1;
 		} else {
-			noMatchList = append(noMatchList,testList[i]);
+			matchMap[testList[i]]=0;
 		}
 	}
 
-	fmt.Println("\n",matchList,noMatchList);
-	
-	return nil;
+	// fmt.Println("\n",matchMap);
+	mapJson, err := json.Marshal(matchMap);
+	if (err != nil) {
+		fmt.Println(err);
+		return "";
+	}
+	// fmt.Println("\n",string(mapJson));
+	return string(mapJson);
 }
