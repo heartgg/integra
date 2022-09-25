@@ -8,6 +8,16 @@ type ExamsResult struct {
 	Modality string
 }
 
+type Location struct {
+	Latitude  float64
+	Longitude float64
+}
+
+type BroadCastMessage struct {
+	ExamsResult
+	Location
+}
+
 type Patient struct {
 	ID        string    `firestore:"patient_id" json:"id"`
 	Name      string    `firestore:"name" json:"name"`

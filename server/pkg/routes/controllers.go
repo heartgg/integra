@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"cloud.google.com/go/firestore"
@@ -39,15 +40,36 @@ func readModalityExams() {
 func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("WebSocket Endpoint Hit")
 
-	roomID := r.URL.Query().Get("roomID")
 	modality := websocket.ParseModality(r.URL.Query().Get("modality"))
+	roomID := r.URL.Query().Get("roomID")
+	latitudeStr := r.URL.Query().Get("latitude")
+	longitudeStr := r.URL.Query().Get("longitude")
 
+	if modality == "" {
+		fmt.Fprint(w, "Parameter 'modality' is required")
+		return
+	}
 	if roomID == "" {
 		fmt.Fprint(w, "Parameter 'roomID' is required")
 		return
 	}
-	if modality == "" {
-		fmt.Fprint(w, "Parameter 'modality' is required")
+	if latitudeStr == "" {
+		fmt.Fprint(w, "Parameter 'latitude' is required")
+		return
+	}
+	if longitudeStr == "" {
+		fmt.Fprint(w, "Parameter 'longitude' is required")
+		return
+	}
+
+	latitude, err := strconv.ParseFloat(latitudeStr, 64)
+	if err != nil {
+		fmt.Fprint(w, "Parameter 'latitude' is invalid. Must be a float number")
+		return
+	}
+	longitude, err := strconv.ParseFloat(longitudeStr, 64)
+	if err != nil {
+		fmt.Fprint(w, "Parameter 'latitude' is invalid. Must be a float number")
 		return
 	}
 
@@ -61,6 +83,8 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 		Modality: modality,
 		Conn:     conn,
 		Pool:     pool,
+		Latitude: latitude,
+		Longitude: longitude,
 	}
 
 	pool.Register <- client
@@ -69,18 +93,38 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 
 // controller for getting a scanned barcode id
 func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
-	patientID := r.URL.Query().Get("patientID")
 	modality := r.URL.Query().Get("modality")
+	patientID := r.URL.Query().Get("patientID")
+	latitudeStr := r.URL.Query().Get("latitude")
+	longitudeStr := r.URL.Query().Get("longitude")
 
 	ctx := context.Background()
 
+	if modality == "" {
+		fmt.Fprint(w, "Parameter 'modality' is required")
+		return
+	}
 	if patientID == "" {
 		fmt.Fprint(w, "Parameter 'patientID' is required")
 		return
 	}
+	if latitudeStr == "" {
+		fmt.Fprint(w, "Parameter 'latitude' is required")
+		return
+	}
+	if longitudeStr == "" {
+		fmt.Fprint(w, "Parameter 'longitude' is required")
+		return
+	}
 
-	if modality == "" {
-		fmt.Fprint(w, "Parameter 'modality' is required")
+	latitude, err := strconv.ParseFloat(latitudeStr, 64)
+	if err != nil {
+		fmt.Fprint(w, "Parameter 'latitude' is invalid. Must be a float number")
+		return
+	}
+	longitude, err := strconv.ParseFloat(longitudeStr, 64)
+	if err != nil {
+		fmt.Fprint(w, "Parameter 'latitude' is invalid. Must be a float number")
 		return
 	}
 
@@ -107,11 +151,19 @@ func scanExamsHandler(client *firestore.Client, pool *websocket.Pool, w http.Res
 		fmt.Fprint(w, err.Error())
 		return
 	}
-	combined := models.ExamsResult{
-		Patient:  patient,
-		Exams:    exams,
-		Modality: modality,
+
+	combined := models.BroadCastMessage{
+		ExamsResult: models.ExamsResult{
+			Patient:  patient,
+			Exams:    exams,
+			Modality: modality,
+		},
+		Location: models.Location{
+			Latitude:  latitude,
+			Longitude: longitude,
+		},
 	}
+
 	combinedJson, err := json.Marshal(combined)
 	if err != nil {
 		fmt.Fprint(w, "Error marshalling combined json")

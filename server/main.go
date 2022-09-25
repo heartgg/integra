@@ -19,6 +19,6 @@ func main() {
 	}
 	routes.SetupRoutes()
 	port := os.Getenv("PORT")
-	fmt.Printf("Listening on port: %v", port)
+	fmt.Printf("Listening on port: %v\n", port)
 	http.ListenAndServe(":"+port, nil)
 }

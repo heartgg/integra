@@ -12,6 +12,8 @@ type Client struct {
 	ID       string
 	RoomID   string
 	Modality Modality
+	Latitude float64
+	Longitude float64
 	Conn     *websocket.Conn
 	Pool     *Pool
 }

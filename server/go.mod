@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	cloud.google.com/go/firestore v1.6.1
+	github.com/LucaTheHacker/go-haversine v0.0.0-20220213075817-0d811fb84a1a
 	github.com/gorilla/websocket v1.5.0
 	github.com/joho/godotenv v1.4.0
 	github.com/sashabaranov/go-gpt3 v0.0.0-20220811094137-be08f204f03a
