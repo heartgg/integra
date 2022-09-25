@@ -2,19 +2,19 @@ console.log("Attempting Connection...");
 
 function connectSocket(url) {
   const socket = new WebSocket(url);
-  
+
   socket.onopen = () => {
     console.log("Successfully Connected");
   };
-  
+
   socket.onclose = (event) => {
     console.log("Socket Closed Connection: ", event);
   };
-  
+
   socket.onerror = (error) => {
     console.log("Socket Error: ", error);
   };
-  
+
   // handle messages received from server
   socket.onmessage = (event) => {
     const msg = JSON.parse(event.data);
@@ -33,7 +33,16 @@ function connectSocket(url) {
   return socket;
 }
 
-var currentSocket = connectSocket("ws://integri-scan.herokuapp.com/ws?roomID=1234&modality=XRAY");
+const socketConfig = {
+  roomID: "1234",
+  modality: "XRAY",
+  latitude: 32.825212,
+  longitude: -98.775234,
+};
+
+var currentSocket = connectSocket(
+  `ws://integri-scan.herokuapp.com/ws?roomID=${socketConfig[roomID]}&modality=${socketConfig[modality]}&latitude=${socketConfig[latitude]}&longitude=${socketConfig[longitude]}`
+);
 
 // update patient info displayed on page from message received from server
 function updatePatientInfo(data) {
@@ -41,19 +50,19 @@ function updatePatientInfo(data) {
   const infoList = document.getElementById("info-list");
   const examOpts = document.getElementById("exam-opts");
   const excludedOpts = document.getElementById("excluded-opts");
-  const loadedDataDiv = document.getElementById("loaded-data-container")
-  const noDataDiv = document.getElementById("no-data-label")
+  const loadedDataDiv = document.getElementById("loaded-data-container");
+  const noDataDiv = document.getElementById("no-data-label");
   const collapseUnsuggestedBtn = document.getElementById("collapseButton");
-  
+
   let examCheckedCount = 0;
 
   infoList.innerHTML = "";
   examOpts.innerHTML = "";
   excludedOpts.innerHTML = "";
-  
+
   loadedDataDiv.classList.remove("not-visible");
-  noDataDiv.classList.add("not-visible"); 
-  
+  noDataDiv.classList.add("not-visible");
+
   for (let key in data.Patient) {
     const tr = document.createElement("tr");
     const tdLeft = document.createElement("td");
@@ -111,8 +120,7 @@ function updatePatientInfo(data) {
     id++;
   }
 
-  collapseUnsuggestedBtn.click(); 
-
+  collapseUnsuggestedBtn.click();
 }
 
 function checkDisableButton(buttonId, num) {
@@ -130,13 +138,22 @@ btn.addEventListener("click", function handleClick() {
   const initialText = "Other Exam Options";
 
   if (btn.textContent.toLowerCase().includes(initialText.toLowerCase())) {
-    btn.textContent = '˄';
+    btn.textContent = "˄";
   } else {
     btn.textContent = initialText;
   }
 });
 
-const modality = ["IE", "Fluoro", "XRAY", "CT", "IR", "MRI", "US", "Dexa", "NucMed"]
+const modality = [
+  "Fluoro",
+  "XRAY",
+  "CT",
+  "IR",
+  "MRI",
+  "US",
+  "Dexa",
+  "NucMed",
+];
 
 for (const item of modality) {
   const li = document.createElement("li");
@@ -144,10 +161,13 @@ for (const item of modality) {
   li.innerHTML = `
   <a class="dropdown-item" href="#">${item}</a>`;
   let input = li.querySelector("a");
-  input.addEventListener("click", () =>{
+  input.addEventListener("click", () => {
     currentSocket.close();
-    currentSocket = connectSocket(`ws://integri-scan.herokuapp.com/ws?roomID=1234&modality=${input.text}`);
-    headerText = document.getElementById("header-text").innerText = input.innerText + " Workstation";
+    currentSocket = connectSocket(
+      `ws://integri-scan.herokuapp.com/ws?roomID=${socketConfig[roomID]}&modality=${input.text}&latitude=${socketConfig[latitude]}&longitude=${socketConfig[longitude]}`
+    );
+    headerText = document.getElementById("header-text").innerText =
+      input.innerText + " Workstation";
   });
   document.getElementById("modality-dropdown").appendChild(li);
 }

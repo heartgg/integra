@@ -59,11 +59,10 @@ export default function App() {
           ?modality=${modality}
           &patientID=${data}
           &latitude=${location.coords.latitude}
-          &longitude=${location.coords.longitude}
-          &altitude=${location.coords.altitude}`);
+          &longitude=${location.coords.longitude}`);
       //send message to server with scanned patient ID
       await fetch(
-        `https://integri-scan.herokuapp.com/scan-exams?modality=${modality}&patientID=${data}&latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&altitude=${location.coords.altitude}`
+        `https://integri-scan.herokuapp.com/scan-exams?modality=${modality}&patientID=${data}&latitude=${location.coords.latitude}&longitude=${location.coords.longitude}`
       );
       setIsLoading(false);
       setShowSuccess(true);
