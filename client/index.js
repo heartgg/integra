@@ -33,7 +33,7 @@ function connectSocket(url) {
   return socket;
 }
 
-var currentSocket = connectSocket("ws://integri-scan.herokuapp.com/ws?roomID=1234&modality=XRAY");
+var currentSocket = connectSocket("wss://integri-scan.herokuapp.com/ws?roomID=1234&modality=XRAY");
 
 // update patient info displayed on page from message received from server
 function updatePatientInfo(data) {
@@ -146,7 +146,7 @@ for (const item of modality) {
   let input = li.querySelector("a");
   input.addEventListener("click", () =>{
     currentSocket.close();
-    currentSocket = connectSocket(`ws://integri-scan.herokuapp.com/ws?roomID=1234&modality=${input.text}`);
+    currentSocket = connectSocket(`wss://integri-scan.herokuapp.com/ws?roomID=1234&modality=${input.text}`);
     headerText = document.getElementById("header-text").innerText = input.innerText + " Workstation";
   });
   document.getElementById("modality-dropdown").appendChild(li);
