@@ -1,4 +1,4 @@
-const DEV = true;
+const DEV = false;
 
 console.log("Attempting Connection...");
 
