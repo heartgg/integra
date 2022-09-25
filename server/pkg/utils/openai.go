@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"strings"
+	"regexp"
 
 	gogpt "github.com/sashabaranov/go-gpt3"
 )
@@ -28,32 +29,40 @@ func AskAI(diagnosis string, testList []string, testListStr string) (map[string]
 
 	ctx := context.Background()
 
-	prompt := "Given " + testListStr + "what are the best exams for a patient with " + diagnosis + "?"
-	// fmt.Println("\n\n\nThe prompt is ", prompt, "\n")
-	req := gogpt.CompletionRequest{
-		Model:       "text-babbage-001",
-		MaxTokens:   120,
-		Prompt:      prompt,
-		Temperature: 0.19,
-	}
-	resp, err := c.CreateCompletion(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-
-	// fmt.Println("The response from OpenAI is ", resp.Choices[0].Text)
-	// fmt.Println("\nThe matches Are!!!")
-
+	var suggestedFound = false
+	var aiAttemptCount = 1
 	matchMap := make(map[string]int)
 
-	lowerResp := strings.ToLower(resp.Choices[0].Text)
-	for i := 0; i < len(testList); i++ {
-		if strings.Contains(lowerResp, strings.ToLower(testList[i])) {
-			// fmt.Println(testList[i])
-			matchMap[testList[i]] = 1
-		} else {
-			matchMap[testList[i]] = 0
+	for suggestedFound == false && aiAttemptCount < 5 {
+		prompt := "Given " + testListStr + "what are the best exams for a patient with " + diagnosis + "?"
+		// fmt.Println("\n\n\nThe prompt is ", prompt, "\n")
+		req := gogpt.CompletionRequest{
+			Model:       "text-babbage-001",
+			MaxTokens:   120,
+			Prompt:      prompt,
+			Temperature: 0.19,
 		}
+		resp, err := c.CreateCompletion(ctx, req)
+		if err != nil {
+			return nil, err
+		}
+
+		lowerResp := strings.ToLower(resp.Choices[0].Text)
+		var nonAlphanumericRegex = regexp.MustCompile(`[^a-zA-Z0-9]+`)
+		respSorted := nonAlphanumericRegex.ReplaceAllString(lowerResp,"")
+		
+		for i := 0; i < len(testList); i++ {
+
+			examStrFiltered := strings.ToLower(testList[i]);
+			examStrFiltered = nonAlphanumericRegex.ReplaceAllString(examStrFiltered,"");
+			if strings.Contains(respSorted, examStrFiltered) {
+				matchMap[testList[i]] = 1
+				suggestedFound = true
+			} else {
+				matchMap[testList[i]] = 0
+			}
+		}
+		aiAttemptCount++
 	}
 
 	return matchMap, nil
