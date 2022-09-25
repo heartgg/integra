@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -26,9 +25,7 @@ func SetupRoutes() {
 	pool := websocket.NewPool()
 	go pool.Start()
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Welcome to the IntegriScan API")
-	})
+	http.Handle("/", http.FileServer(http.Dir("../client")))
 
 	// /ws?roomID=<RoomID>&modality=<Modality>
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
