@@ -148,7 +148,7 @@ for (const item of modality) {
   let input = li.querySelector("a");
   input.addEventListener("click", () =>{
     currentSocket.close();
-    currentSocket = connectSocket((DEV ? "ws://localhost:3000" : "wss://integri-scan.herokuapp.com") + `ws?roomID=1234&modality=${input.text}`);
+    currentSocket = connectSocket((DEV ? "ws://localhost:3000" : "wss://integri-scan.herokuapp.com") + `/ws?roomID=1234&modality=${input.text}`);
     headerText = document.getElementById("header-text").innerText = input.innerText + " Workstation";
   });
   document.getElementById("modality-dropdown").appendChild(li);
