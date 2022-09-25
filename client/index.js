@@ -113,9 +113,11 @@ function updatePatientInfo(data) {
     id++;
   }
 
-  collapseUnsuggestedBtn.click(); 
 
 }
+
+document.getElementById("collapseButton").click(); 
+
 
 function checkDisableButton(buttonId, num) {
   const btn = document.getElementById(buttonId);
@@ -127,14 +129,15 @@ function checkDisableButton(buttonId, num) {
 }
 
 const btn = document.getElementById("collapseButton");
-
+var collapsed = false;
 btn.addEventListener("click", function handleClick() {
   const initialText = "Other Exam Options";
-
-  if (btn.textContent.toLowerCase().includes(initialText.toLowerCase())) {
-    btn.textContent = '˄';
+  collapsed = !collapsed;
+  console.log(btn.innerHTML);
+  if (collapsed) {
+    btn.innerHTML = `<i class="bi bi-arrow-down"></i>&nbspShow`;
   } else {
-    btn.textContent = initialText;
+    btn.innerHTML = `<i class="bi bi-arrow-up"></i>&nbspHide`;
   }
 });
 
@@ -150,6 +153,37 @@ for (const item of modality) {
     currentSocket.close();
     currentSocket = connectSocket((DEV ? "ws://localhost:3000" : "wss://integri-scan.herokuapp.com") + `/ws?roomID=1234&modality=${input.text}`);
     headerText = document.getElementById("header-text").innerText = input.innerText + " Workstation";
+    showInfo(false);
   });
   document.getElementById("modality-dropdown").appendChild(li);
+}
+
+document.getElementById("confirm-btn").addEventListener("click", () => {
+    showInfo(false);
+    runSuccess();
+});
+
+function runSuccess() {
+  $(".success-checkmark").show();
+  $(".check-icon").show();
+  setTimeout(function () {
+    $(".check-icon").hide();
+    $(".success-checkmark").hide();
+  }, 1500);
+}
+
+$(".check-icon").hide();
+$(".success-checkmark").hide();
+
+function showInfo (boolean) {
+  const loadedDataDiv = document.getElementById("loaded-data-container");
+  const noDataDiv = document.getElementById("no-data-label");
+  if (boolean) {
+    loadedDataDiv.classList.remove("not-visible");
+    noDataDiv.classList.add("not-visible"); 
+  } else {
+    loadedDataDiv.classList.add("not-visible");
+    noDataDiv.classList.remove("not-visible"); 
+  }
+  collapsed = false;
 }

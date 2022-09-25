@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Workstation</title>
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="anim.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -17,6 +19,7 @@
       crossorigin="anonymous"
       defer
     ></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous" defer></script>
     <script type="text/javascript" src="index.js" defer></script>
   </head>
 
@@ -24,9 +27,9 @@
     
     <div class="inner-body">
     <div class="header">
-      <h1 id="header-text">X-RAY Workstation</h1>
+      <h1 id="header-text">XRAY Workstation</h1>
       <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
           Modality
         </button>
         <ul class="dropdown-menu" id="modality-dropdown" aria-labelledby="dropdownMenuButton1">
@@ -36,6 +39,14 @@
     <hr class="solid"></hr>
     <div id="no-data-label">
       <h4>Please scan a patient's code to view exams!</h4>
+    </div>
+    <div class="success-checkmark">
+      <div class="check-icon" id="check-icon">
+        <span class="icon-line line-tip"></span>
+        <span class="icon-line line-long"></span>
+        <div class="icon-circle"></div>
+        <div class="icon-fix"></div>
+      </div>
     </div>
     <div id="loaded-data-container" class="not-visible">
       <div class="container">
@@ -52,22 +63,20 @@
         <fieldset>
           <legend>Other Exams:</legend>
           <div class="collapse" id="collapseExample">
-            <div class="card card-body">
               <ul class="list-group" id="excluded-opts">
     
               </ul>
-            </div>
           </div>
         </fieldset>
         <p class="collapse-unsuggested">
-          <a class="btn btn-primary" id="collapseButton" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-            Other exam options
+          <a class="btn btn-outline-dark" id="collapseButton" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <i class="bi bi-arrow-up"></i>&nbspHide
           </a>
           </button>
         </p>
-        <button type="button" class="confirm-btn btn btn-primary btn-lg" style="margin-top:15px" id="confirm-btn">Submit</button>
+        <button type="button" class="btn btn-outline-success" style="margin-top:15px" id="confirm-btn">Submit</button>
       </div>
       
-    </div>
-  </div> </body>
+  </div>
+</body>
 </html>
