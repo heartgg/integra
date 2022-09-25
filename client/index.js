@@ -1,3 +1,5 @@
+const DEV = false;
+
 console.log("Attempting Connection...");
 
 function connectSocket(url) {
@@ -40,8 +42,8 @@ const socketConfig = {
   longitude: -98.775234,
 };
 
-var currentSocket = connectSocket(
-  `ws://integri-scan.herokuapp.com/ws?roomID=${socketConfig[roomID]}&modality=${socketConfig[modality]}&latitude=${socketConfig[latitude]}&longitude=${socketConfig[longitude]}`
+ var currentSocket = connectSocket((DEV ? 
+  "ws://localhost:3000" : "wss://integri-scan.herokuapp.com") + `/ws?roomID=${socketConfig[roomID]}&modality=${socketConfig[modality]}&latitude=${socketConfig[latitude]}&longitude=${socketConfig[longitude]}`
 );
 
 // update patient info displayed on page from message received from server
@@ -164,7 +166,7 @@ for (const item of modality) {
   input.addEventListener("click", () => {
     currentSocket.close();
     currentSocket = connectSocket(
-      `ws://integri-scan.herokuapp.com/ws?roomID=${socketConfig[roomID]}&modality=${input.text}&latitude=${socketConfig[latitude]}&longitude=${socketConfig[longitude]}`
+      (DEV ? "ws://localhost:3000" : "wss://integri-scan.herokuapp.com") + `ws?roomID=${socketConfig[roomID]}&modality=${input.text}&latitude=${socketConfig[latitude]}&longitude=${socketConfig[longitude]}`
     );
     headerText = document.getElementById("header-text").innerText =
       input.innerText + " Workstation";

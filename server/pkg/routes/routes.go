@@ -25,7 +25,7 @@ func SetupRoutes() {
 	pool := websocket.NewPool()
 	go pool.Start()
 
-	http.Handle("/", http.FileServer(http.Dir("client")))
+	http.Handle("/", http.FileServer(http.Dir("../client")))
 
 	// /ws?roomID=<RoomID>&modality=<Modality>
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {

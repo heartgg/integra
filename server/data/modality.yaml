@@ -15,3 +15,35 @@ Fluoro:
   Fluroscopic Enteroclysis,
   Fluoroscopic Defecography,
   Fluoroscopic IVP]
+IR:
+  [Angiography,
+    Angioplasy,
+    Embolization]
+NucMed:
+  [Bone/Joint Scan,
+    Liver/Spleen Scan,
+    Thyroid Scan,
+    PET Scan,
+    Gallium Scan,
+    Chemotherapy]
+MRI:
+  [Functional MRI,
+  Breast Scan,
+  Cardiac MRI,
+  Magnetic Resonance Venography,
+  Brain MRI,
+  Abdomen MRI,
+  Bone and Joint MRI]
+Dexa:
+  [Central DEXA,
+  Peripheral DEXA]
+CT: 
+  [CT Angiography,
+  CT Arthrography,
+  CT Bones Scan,
+  CT Brain Scan]
+US: 
+  [External Ultrasound,
+  Internal Ultrasound,
+  Endoscopic Ultrasound]
+
